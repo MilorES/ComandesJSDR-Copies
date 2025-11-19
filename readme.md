@@ -4,6 +4,7 @@ ComandesJSDR és una plataforma centralitza la gestió de comandes, automatitzan
 # Requisits
 1. Nom del contenidor: comandes_mariadb
 2. Nom de la base de dades: databaseapi
+3. Configurar $MAX_BACKUPS per mantenir un nombra máxim de copies.
 
 # WINDOWS (Powershell)
 
@@ -17,7 +18,7 @@ ComandesJSDR és una plataforma centralitza la gestió de comandes, automatitzan
 .\restore.ps1 backup_20250105_020000.sql
 ```
 
-## Configurar backup automàtic cada hora
+## Configurar backup automàtic
 1. Obrir programador de tasques
 2. Programa: `powershell.exe` Argument: `-ExecutionPolicy Bypass -File "C:\ruta\al\script\backup.ps1"`
 3. Configura el disparador (hora, dies, etc.).
@@ -34,8 +35,8 @@ ComandesJSDR és una plataforma centralitza la gestió de comandes, automatitzan
 ./restore.sh backup_20250105_020000.sql.gz
 ```
 
-## Configurar backup automàtic cada hora
+## Configurar backup automàtic diariament a les 2.00
 ```bash
 crontab -e
-0 * * * * /ruta/a/backup.sh >> /ruta/a/backups/backup.log 2>&1
+0 2 * * * /ruta/a/backup.sh >> /ruta/a/backups/backup.log 2>&1
 ```

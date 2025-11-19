@@ -3,6 +3,9 @@
 
 $ErrorActionPreference = "Stop"
 
+# Configuració: Nombre màxim de backups a mantenir
+$MAX_BACKUPS = 10
+
 # Obtenir la ruta actual
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 
@@ -26,6 +29,21 @@ if ($LASTEXITCODE -eq 0) {
     Write-Host "✅ Backup completat!" -ForegroundColor Green
     Write-Host "   📄 Fitxer: backups/$backupFile"
     Write-Host "   📊 Tamany: $([math]::Round($size, 2)) MB"
+    
+    # Eliminar backups antics si se supera el límit
+    $allBackups = Get-ChildItem -Path "backups" -Filter "backup_*.sql" | Sort-Object LastWriteTime -Descending
+    $backupCount = $allBackups.Count
+    
+    if ($backupCount -gt $MAX_BACKUPS) {
+        $backupsToDelete = $backupCount - $MAX_BACKUPS
+        Write-Host ""
+        Write-Host "🗑️  Eliminant $backupsToDelete backup(s) antic(s)..." -ForegroundColor Yellow
+        $allBackups | Select-Object -Skip $MAX_BACKUPS | ForEach-Object {
+            Write-Host "   Eliminant: $($_.Name)"
+            Remove-Item $_.FullName -Force
+        }
+        Write-Host "✅ Mantenint només els $MAX_BACKUPS backups més recents" -ForegroundColor Green
+    }
 } else {
     Write-Host "❌ Error en crear el backup" -ForegroundColor Red
     exit 1
