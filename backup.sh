@@ -18,7 +18,7 @@ cd "$(dirname "$0")"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 BACKUP_FILE="backup_${TIMESTAMP}.sql.gz"
 
-echo "🔄 Creant backup: $BACKUP_FILE"
+echo "[INFO] Creant backup: $BACKUP_FILE"
 
 # Crear backup temporal
 TEMP_BACKUP="/tmp/$BACKUP_FILE"
@@ -26,8 +26,8 @@ docker exec comandes_mariadb sh -c 'mysqldump -u root -p"$MYSQL_ROOT_PASSWORD" d
 
 if [ $? -eq 0 ]; then
     SIZE=$(du -h "$TEMP_BACKUP" | cut -f1)
-    echo "✅ Backup creat!"
-    echo "   📊 Tamany: $SIZE"
+    echo "[OK] Backup creat correctament"
+    echo "     Tamany: $SIZE"
     echo ""
     
     # Copiar a cada destí
@@ -36,33 +36,33 @@ if [ $? -eq 0 ]; then
         # Eliminar espais en blanc
         dest=$(echo "$dest" | xargs)
         
-        echo "📁 Copiant a: $dest"
+        echo "[INFO] Copiant a: $dest"
         mkdir -p "$dest"
         cp "$TEMP_BACKUP" "$dest/$BACKUP_FILE"
         
         if [ $? -eq 0 ]; then
-            echo "   ✅ Copiat correctament"
+            echo "       Copiat correctament"
             
             # Eliminar backups antics en aquest destí
             BACKUP_COUNT=$(ls -1 "$dest"/backup_*.sql.gz 2>/dev/null | wc -l)
             if [ $BACKUP_COUNT -gt $MAX_BACKUPS ]; then
                 BACKUPS_TO_DELETE=$((BACKUP_COUNT - MAX_BACKUPS))
-                echo "   🗑️  Eliminant $BACKUPS_TO_DELETE backup(s) antic(s)..."
+                echo "       Eliminant $BACKUPS_TO_DELETE backup(s) antic(s)..."
                 ls -1t "$dest"/backup_*.sql.gz | tail -n $BACKUPS_TO_DELETE | while read old_backup; do
                     rm "$old_backup"
                 done
-                echo "   ✅ Mantenint només els $MAX_BACKUPS backups més recents"
+                echo "       Mantenint només els $MAX_BACKUPS backups més recents"
             fi
         else
-            echo "   ⚠️  Error al copiar a $dest"
+            echo "       [ERROR] Error al copiar a $dest"
         fi
         echo ""
     done
     
     # Eliminar backup temporal
     rm "$TEMP_BACKUP"
-    echo "🎉 Procés completat!"
+    echo "[OK] Procés completat correctament"
 else
-    echo "❌ Error en crear el backup"
+    echo "[ERROR] Error en crear el backup"
     exit 1
 fi

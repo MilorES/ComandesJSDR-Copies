@@ -90,29 +90,29 @@ Afegeix la línia següent:
 
 ## Característiques
 
-✅ **Múltiples destins**: Guarda còpies en diverses ubicacions simultàniament  
-✅ **Rotació automàtica**: Manté només les N còpies més recents en cada destí  
-✅ **Manejo d'errors**: Continua amb altres destins si un falla  
-✅ **Feedback visual**: Mostra el progrés de cada operació  
-✅ **Compressió**: Les còpies en Linux es comprimeixen automàticament (gzip)  
-✅ **Timestamps**: Cada còpia té la data i hora de creació
+- **Múltiples destins**: Guarda còpies en diverses ubicacions simultàniament
+- **Rotació automàtica**: Manté només les N còpies més recents en cada destí
+- **Manejo d'errors**: Continua amb altres destins si un falla
+- **Feedback visual**: Mostra el progrés de cada operació
+- **Compressió**: Les còpies en Linux es comprimeixen automàticament (gzip)
+- **Timestamps**: Cada còpia té la data i hora de creació
 
 ## Exemples de sortida
 
 ```
-🔄 Creant backup: backup_20250201_140530.sql.gz
-✅ Backup creat!
-   📊 Tamany: 2.5 MB
+[INFO] Creant backup: backup_20250201_140530.sql.gz
+[OK] Backup creat correctament
+     Tamany: 2.5 MB
 
-📁 Copiant a: backups
-   ✅ Copiat correctament
+[INFO] Copiant a: backups
+       Copiat correctament
 
-📁 Copiant a: /mnt/nas/backups
-   ✅ Copiat correctament
-   🗑️  Eliminant 2 backup(s) antic(s)...
-   ✅ Mantenint només els 10 backups més recents
+[INFO] Copiant a: /mnt/nas/backups
+       Copiat correctament
+       Eliminant 2 backup(s) antic(s)...
+       Mantenint només els 10 backups més recents
 
-🎉 Procés completat!
+[OK] Procés completat correctament
 ```
 
 ## Notes importants

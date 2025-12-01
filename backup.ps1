@@ -17,7 +17,7 @@ $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
 $backupFile = "backup_$timestamp.sql"
 
-Write-Host "🔄 Creant backup: $backupFile" -ForegroundColor Cyan
+Write-Host "[INFO] Creant backup: $backupFile" -ForegroundColor Cyan
 
 # Crear backup temporal
 $tempBackup = Join-Path $env:TEMP $backupFile
@@ -25,8 +25,8 @@ docker exec comandes_mariadb sh -c 'mysqldump -u root -p"$MYSQL_ROOT_PASSWORD" d
 
 if ($LASTEXITCODE -eq 0) {
     $size = (Get-Item $tempBackup).Length / 1MB
-    Write-Host "✅ Backup creat!" -ForegroundColor Green
-    Write-Host "   📊 Tamany: $([math]::Round($size, 2)) MB"
+    Write-Host "[OK] Backup creat correctament" -ForegroundColor Green
+    Write-Host "     Tamany: $([math]::Round($size, 2)) MB"
     Write-Host ""
     
     # Copiar a cada destí
@@ -38,7 +38,7 @@ if ($LASTEXITCODE -eq 0) {
             $dest = Join-Path $scriptDir $dest
         }
         
-        Write-Host "📁 Copiant a: $dest" -ForegroundColor Cyan
+        Write-Host "[INFO] Copiant a: $dest" -ForegroundColor Cyan
         
         # Crear carpeta si no existeix
         if (-not (Test-Path $dest)) {
@@ -49,7 +49,7 @@ if ($LASTEXITCODE -eq 0) {
         
         try {
             Copy-Item $tempBackup -Destination $destFile -Force
-            Write-Host "   ✅ Copiat correctament" -ForegroundColor Green
+            Write-Host "       Copiat correctament" -ForegroundColor Green
             
             # Eliminar backups antics en aquest destí
             $allBackups = Get-ChildItem -Path $dest -Filter "backup_*.sql" | Sort-Object LastWriteTime -Descending
@@ -57,15 +57,15 @@ if ($LASTEXITCODE -eq 0) {
             
             if ($backupCount -gt $MAX_BACKUPS) {
                 $backupsToDelete = $backupCount - $MAX_BACKUPS
-                Write-Host "   🗑️  Eliminant $backupsToDelete backup(s) antic(s)..." -ForegroundColor Yellow
+                Write-Host "       Eliminant $backupsToDelete backup(s) antic(s)..." -ForegroundColor Yellow
                 $allBackups | Select-Object -Skip $MAX_BACKUPS | ForEach-Object {
                     Remove-Item $_.FullName -Force
                 }
-                Write-Host "   ✅ Mantenint només els $MAX_BACKUPS backups més recents" -ForegroundColor Green
+                Write-Host "       Mantenint només els $MAX_BACKUPS backups més recents" -ForegroundColor Green
             }
         }
         catch {
-            Write-Host "   ⚠️  Error al copiar a $dest : $_" -ForegroundColor Yellow
+            Write-Host "       [ERROR] Error al copiar a $dest : $_" -ForegroundColor Yellow
         }
         
         Write-Host ""
@@ -73,8 +73,8 @@ if ($LASTEXITCODE -eq 0) {
     
     # Eliminar backup temporal
     Remove-Item $tempBackup -Force
-    Write-Host "🎉 Procés completat!" -ForegroundColor Green
+    Write-Host "[OK] Procés completat correctament" -ForegroundColor Green
 } else {
-    Write-Host "❌ Error en crear el backup" -ForegroundColor Red
+    Write-Host "[ERROR] Error en crear el backup" -ForegroundColor Red
     exit 1
 }
