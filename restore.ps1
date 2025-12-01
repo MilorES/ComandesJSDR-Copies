@@ -1,5 +1,6 @@
 # Script per restaurar backup de MariaDB
 # Us: .\restore.ps1 backup_20250105_020000.sql
+#     .\restore.ps1 D:\Backups\backup_20250105_020000.sql
 
 param(
     [Parameter(Mandatory=$true)]
@@ -8,7 +9,13 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-$fullPath = "backups/$BackupFile"
+# Si la ruta conté : o \ o /, usar-la directament
+# Sinó, buscar a la carpeta backups/ per defecte
+if ($BackupFile -match '[:\\]' -or (Test-Path $BackupFile)) {
+    $fullPath = $BackupFile
+} else {
+    $fullPath = "backups/$BackupFile"
+}
 
 if (-not (Test-Path $fullPath)) {
     Write-Host "[ERROR] No es troba el fitxer $fullPath" -ForegroundColor Red
@@ -16,7 +23,7 @@ if (-not (Test-Path $fullPath)) {
 }
 
 Write-Host "[ADVERTIMENT] Això sobreescriurà la base de dades actual" -ForegroundColor Yellow
-Write-Host "              Fitxer: $BackupFile"
+Write-Host "              Fitxer: $fullPath"
 $confirm = Read-Host "¿Continuar? (S/N)"
 
 if ($confirm -ne "S" -and $confirm -ne "s") {
