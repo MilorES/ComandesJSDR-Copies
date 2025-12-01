@@ -45,8 +45,16 @@ El script:
 - Mostra informació detallada del procés
 
 ### Restaurar
+
+**Des de la carpeta per defecte (backups/):**
 ```powershell
 .\restore.ps1 backup_20250105_020000.sql
+```
+
+**Des d'un altre destí (ruta completa):**
+```powershell
+.\restore.ps1 D:\Backups\backup_20250105_020000.sql
+.\restore.ps1 \\servidor\backups\backup_20250105_020000.sql
 ```
 
 ### Configurar backup automàtic
@@ -71,8 +79,16 @@ El script:
 - Mostra informació detallada del procés
 
 ### Restaurar
+
+**Des de la carpeta per defecte (backups/):**
 ```bash
 ./restore.sh backup_20250105_020000.sql.gz
+```
+
+**Des d'un altre destí (ruta completa):**
+```bash
+./restore.sh /mnt/nas/backups/backup_20250105_020000.sql.gz
+./restore.sh ../altres_backups/backup_20250105_020000.sql.gz
 ```
 
 ### Configurar backup automàtic
@@ -96,6 +112,7 @@ Afegeix la línia següent:
 - **Feedback visual**: Mostra el progrés de cada operació
 - **Compressió**: Les còpies en Linux es comprimeixen automàticament (gzip)
 - **Timestamps**: Cada còpia té la data i hora de creació
+- **Restauració flexible**: Accepta tant noms de fitxer (busca a `backups/`) com rutes completes
 
 ## Exemples de sortida
 
