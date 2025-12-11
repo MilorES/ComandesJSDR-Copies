@@ -1,0 +1,16 @@
+# Còpies de seguretat generades pels scripts
+backups/
+*.sql
+*.sql.gz
+
+# Fitxers de log temporals
+*.log
+
+# Configuració local d'IDE/editors
+.vscode/
+.idea/
+*.code-workspace
+
+# Sistema operatiu
+.DS_Store
+Thumbs.db
